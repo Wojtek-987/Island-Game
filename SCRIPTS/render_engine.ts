@@ -2,23 +2,23 @@
 
 'use strict';
 
-const BASE_W = 800, BASE_H = 500;
-let CANVAS_WIDTH = 800, CANVAS_HEIGHT = 500, SCALE = 1;
-const TILE_SIZE = 4;
+const BASE_W: number = 800, BASE_H: number = 500;
+let CANVAS_WIDTH: number = 800, CANVAS_HEIGHT: number = 500, SCALE: number = 1;
+const TILE_SIZE: number = 4;
 
-function setup() {
+function setup(): void {
     calculateWindowDimensions();
     createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     smooth();
     frameRate(30);
 }
 
-function draw() {
+function draw(): void {
     // Draw Tiles
     noStroke();
     for (let y = 0; y < MAP_SIZE; y++) {
         for (let x = 0; x < MAP_SIZE; x++) {
-            const tileType = MAP.mapGrid[y][x];
+            const tileType: string = MAP.mapGrid[y][x];
 
             switch (tileType) {
                 case 'ocean':
@@ -47,20 +47,20 @@ function draw() {
             rect(x * TILE_SIZE * SCALE, y * TILE_SIZE * SCALE, TILE_SIZE * SCALE, TILE_SIZE * SCALE);
         }
     }
-    // Draw Details - add any additional drawing here
+    // Draw Details
 }
 
 
 let resizeTimeout: number | undefined;
-function windowResized() {
+function windowResized(): void {
     if (resizeTimeout) clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
+    resizeTimeout = setTimeout((): void => {
         calculateWindowDimensions();
         resizeCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     }, 500);
 }
 
-function calculateWindowDimensions() {
+function calculateWindowDimensions(): void {
     if (window.innerWidth / BASE_W >= window.innerHeight / BASE_H) {
         // If "width" > "height", set proportions relative to height
         CANVAS_WIDTH = BASE_W * (window.innerHeight / BASE_H);

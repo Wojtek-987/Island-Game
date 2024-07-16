@@ -1,5 +1,12 @@
 'use strict';
 
+const DIRECTIONS = [
+    { x: 0, y: -1 },  // North
+    { x: 1, y: 0 },   // East
+    { x: 0, y: 1 },   // South
+    { x: -1, y: 0 }   // West
+];
+
 function initMap(size: number): string[][] {
     const mapSize: number = Math.max(1, size);
     return Array.from({ length: mapSize }, () => new Array<string>(mapSize).fill('ocean'));
@@ -80,30 +87,24 @@ class Island {
             if (!tile.isShore) return;
 
             const seed: string = returnSeed();
-            const directions = [
-                { x: 0, y: -1 },  // North
-                { x: 1, y: 0 },   // East
-                { x: 0, y: 1 },   // South
-                { x: -1, y: 0 }   // West
-            ];
 
-            seed.split('').forEach((value, direction) => {
+            seed.split('').forEach((value: string, direction: number): void => {
                 if (value === '1') {
-                    const newX = tile.position.x + directions[direction].x;
-                    const newY = tile.position.y + directions[direction].y;
+                    const newX = tile.position.x + DIRECTIONS[direction].x;
+                    const newY = tile.position.y + DIRECTIONS[direction].y;
                     if (this.isValidPosition(newX, newY)) {
                         const newTile = new Tile(newX, newY, tile.type);
                         this.updateMapData(newTile);
                     }
                 } else if (value === '2') {
-                    let newX = tile.position.x + directions[direction].x;
-                    let newY = tile.position.y + directions[direction].y;
+                    let newX = tile.position.x + DIRECTIONS[direction].x;
+                    let newY = tile.position.y + DIRECTIONS[direction].y;
                     if (this.isValidPosition(newX, newY)) {
                         const newTile1 = new Tile(newX, newY, tile.type);
                         this.updateMapData(newTile1);
 
-                        newX += directions[direction].x;
-                        newY += directions[direction].y;
+                        newX += DIRECTIONS[direction].x;
+                        newY += DIRECTIONS[direction].y;
                         if (this.isValidPosition(newX, newY)) {
                             const newTile2 = new Tile(newX, newY, tile.type);
                             this.updateMapData(newTile2);
@@ -117,16 +118,9 @@ class Island {
     }
 
     checkIfShore(tile: Tile): boolean {
-        const directions = [
-            { x: 0, y: -1 },  // North
-            { x: 1, y: 0 },   // East
-            { x: 0, y: 1 },   // South
-            { x: -1, y: 0 }   // West
-        ];
-
-        return directions.some(direction => {
-            const newX = tile.position.x + direction.x;
-            const newY = tile.position.y + direction.y;
+        return DIRECTIONS.some(direction => {
+            const newX: number = tile.position.x + direction.x;
+            const newY: number = tile.position.y + direction.y;
             return this.isValidPosition(newX, newY);
         });
     }
@@ -136,11 +130,11 @@ class Island {
     }
 
     findRandomNonShoreTile(): Tile | null {
-        const nonShoreTiles = this.tilesArray.filter(tile => !tile.isShore);
+        const nonShoreTiles: Tile[] = this.tilesArray.filter(tile => !tile.isShore);
         if (nonShoreTiles.length === 0) {
             return null;
         }
-        const randomIndex = Math.floor(Math.random() * nonShoreTiles.length);
+        const randomIndex: number = Math.floor(Math.random() * nonShoreTiles.length);
         return nonShoreTiles[randomIndex];
     }
 }
@@ -153,32 +147,26 @@ class Lake extends Island {
     spillLakes(): void {
         this.tilesArray.forEach(tile => {
             const seed: string = returnSeed();
-            const directions = [
-                { x: 0, y: -1 },  // North
-                { x: 1, y: 0 },   // East
-                { x: 0, y: 1 },   // South
-                { x: -1, y: 0 }   // West
-            ];
 
-            seed.split('').forEach((value, direction) => {
+            seed.split('').forEach((value: string, direction: number): void => {
                 if (value === '1') {
-                    const newX = tile.position.x + directions[direction].x;
-                    const newY = tile.position.y + directions[direction].y;
+                    const newX: number = tile.position.x + DIRECTIONS[direction].x;
+                    const newY: number = tile.position.y + DIRECTIONS[direction].y;
                     if (this.isValidLakePosition(newX, newY)) {
-                        const newTile = new Tile(newX, newY, 'lake');
+                        const newTile: Tile = new Tile(newX, newY, 'lake');
                         this.updateMapData(newTile);
                     }
                 } else if (value === '2') {
-                    let newX = tile.position.x + directions[direction].x;
-                    let newY = tile.position.y + directions[direction].y;
+                    let newX: number = tile.position.x + DIRECTIONS[direction].x;
+                    let newY: number = tile.position.y + DIRECTIONS[direction].y;
                     if (this.isValidLakePosition(newX, newY)) {
-                        const newTile1 = new Tile(newX, newY, 'lake');
+                        const newTile1: Tile = new Tile(newX, newY, 'lake');
                         this.updateMapData(newTile1);
 
-                        newX += directions[direction].x;
-                        newY += directions[direction].y;
+                        newX += DIRECTIONS[direction].x;
+                        newY += DIRECTIONS[direction].y;
                         if (this.isValidLakePosition(newX, newY)) {
-                            const newTile2 = new Tile(newX, newY, 'lake');
+                            const newTile2: Tile = new Tile(newX, newY, 'lake');
                             this.updateMapData(newTile2);
                         }
                     }
@@ -194,14 +182,7 @@ class Lake extends Island {
     }
 
     isShore(x: number, y: number): boolean {
-        const directions = [
-            { x: 0, y: -1 },  // North
-            { x: 1, y: 0 },   // East
-            { x: 0, y: 1 },   // South
-            { x: -1, y: 0 }   // West
-        ];
-
-        return directions.some(direction => {
+        return DIRECTIONS.some(direction => {
             const newX = x + direction.x;
             const newY = y + direction.y;
             return this.isValidPosition(newX, newY) && MAP.mapGrid[newY][newX] === 'ocean';
@@ -226,6 +207,8 @@ class Tile {
         this.isShore = isShore;
     }
 }
+
+// === Generate Islands ===
 
 const MAP_SIZE: number = 100;
 let CHUNKS = [
@@ -260,7 +243,7 @@ function generateNextSpill(): void {
     MAP.islandArray.forEach(island => island.generateNextSpill());
 }
 
-for (let spill = 0; spill < SPILL_NUMBER; spill++) {
+for (let spill: number = 0; spill < SPILL_NUMBER; spill++) {
     generateNextSpill();
     if (spill === 7) {
         generateNewIslands();
@@ -271,13 +254,13 @@ for (let spill = 0; spill < SPILL_NUMBER; spill++) {
 // === Add lakes ===
 
 const LAKE_SPILL_DEPTH = 3;
-function addLakes() {
+function addLakes(): void {
     MAP.islandArray.forEach(island => {
         if (Math.random() < 0.3) {
-            const nonShoreTile = island.findRandomNonShoreTile();
+            const nonShoreTile: Tile | null = island.findRandomNonShoreTile();
             if (nonShoreTile) {
-                const lakeTile = new Tile(nonShoreTile.position.x, nonShoreTile.position.y, 'lake', null, false);
-                const newLake = new Lake(lakeTile);
+                const lakeTile: Tile = new Tile(nonShoreTile.position.x, nonShoreTile.position.y, 'lake');
+                const newLake: Lake = new Lake(lakeTile);
                 MAP.addLake(newLake);
 
                 island.tilesArray = island.tilesArray.filter(tile => tile !== nonShoreTile);
@@ -288,7 +271,7 @@ function addLakes() {
 
 addLakes();
 
-function spillAllLakes(spillDepth: number) {
+function spillAllLakes(spillDepth: number): void {
     console.log("spilled");
     for (let i = 0; i < spillDepth; i++) {
         MAP.lakeArray.forEach(lake => lake.spillLakes());

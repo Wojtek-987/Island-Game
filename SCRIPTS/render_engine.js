@@ -41,7 +41,7 @@ function draw() {
             rect(x * TILE_SIZE * SCALE, y * TILE_SIZE * SCALE, TILE_SIZE * SCALE, TILE_SIZE * SCALE);
         }
     }
-    // Draw Details - add any additional drawing here
+    // Draw Details
 }
 let resizeTimeout;
 function windowResized() {
