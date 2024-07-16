@@ -1,0 +1,15 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    background: #000;
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    padding: 0;
+    outline: 1px dashed red;
+}
